@@ -39,6 +39,11 @@ class simpleattributeselect extends phplistPlugin {
     );
   }
   
+  function upgrade($previous) {
+    parent::upgrade($previous);
+    return true;
+  }
+  
   function sendMessageTab($messageid= 0, $data= array ()) {
     global $tables,$table_prefix;
     if (!$this->enabled)
@@ -184,9 +189,9 @@ class simpleattributeselect extends phplistPlugin {
 
               $where_clause .= "table$i.attributeid = $attribute and ";
               if ($value) {
-                $where_clause .= "( length(table$i.value) and table$i.value != \"off\" and table$i.value != \"0\") ";
+                $where_clause .= sprintf('( length(table%1$d.value) and table%1$d.value != "off" and table%1$d.value != "0") ',$i);
               } else {
-                $where_clause .= "( table$i.value = \"\" or table$i.value = \"0\" or table$i.value = \"off\") ";
+                $where_clause .= sprintf('( table%1$d.value = "" or table%1$d.value = "0" or table%1$d.value = "off") ',$i);
               }
               break;
              default:
@@ -213,8 +218,11 @@ class simpleattributeselect extends phplistPlugin {
       if (empty($where_clause)) {
         $count_query = "";
       } else {
-        $count_query = addslashes("select $select_clause where $where_clause");
-        Sql_query("update $tables[message] set userselection = \"$count_query\" where id = $messageid");
+        $count_query = "select $select_clause where $where_clause";
+        Sql_query(sprintf('update %s set userselection = "%s" where id = %d',
+          $tables["message"],
+          sql_escape($count_query),
+          $messagedata['id']));
       }
      # commented, because this could take too long
      # Sql_Query($count_query);
@@ -236,8 +244,8 @@ class simpleattributeselect extends phplistPlugin {
         }
       }
     }
-#    ob_end_clean();
-#    var_dump($GLOBALS['simpleattributeselect_criteriacache'][$messagedata['id']]);
+    //ob_end_clean();
+    //var_dump($GLOBALS['simpleattributeselect_criteriacache'][$messagedata['id']]);
     $cansend = sizeof($GLOBALS['simpleattributeselect_criteriacache'][$messagedata['id']]) && in_array($userdata['id'],$GLOBALS['simpleattributeselect_criteriacache'][$messagedata['id']]);
     if (VERBOSE) {
       if ($cansend) {
