@@ -123,8 +123,8 @@ class simpleattributeselect extends phplistPlugin {
 
     if (!$any) {
       $criteria_content = "<p>".$GLOBALS['I18N']->get('There are currently no attributes available to use for sending. The campaign will go to any subscriber on the lists selected')."</p>";
-    } else {
-      $criteria_content .= '</table>';
+#    } else {
+#      $criteria_content .= '</table>';
     }
     return $criteria_content .'</div><!-- close accordion -->';
   }
