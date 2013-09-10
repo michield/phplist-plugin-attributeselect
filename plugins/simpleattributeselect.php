@@ -126,7 +126,7 @@ class simpleattributeselect extends phplistPlugin {
     } else {
       $criteria_content .= '</table>';
     }
-    return $criteria_content .'</div>';
+    return $criteria_content .'</div><!-- close accordion -->';
   }
 
   function sendMessageTabTitle($messageid = 0) {
