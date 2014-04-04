@@ -29,8 +29,8 @@ class simpleattributeselect extends phplistPlugin {
 
   function __construct() {
     parent::phplistplugin();
-    $this->numcriterias = getConfig('simpleattributeselect_numcriterias');
     $this->numcriterias = 2;
+    $this->numcriterias = getConfig('simpleattributeselect_numcriterias');
     $GLOBALS['simpleattributeselect_criteriacache'] = array();
   }
 
